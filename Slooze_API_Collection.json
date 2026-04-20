@@ -1,0 +1,168 @@
+{
+  "info": {
+    "name": "Slooze Food App API",
+    "_postman_id": "slooze-food-api-collection",
+    "description": "Complete API collection for Slooze Food Ordering Application",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8080/api" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login as Admin (Nick Fury)",
+          "event": [{ "listen": "test", "script": { "exec": ["var r = pm.response.json(); if(r.data && r.data.token) pm.collectionVariables.set('token', r.data.token);"] } }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"nickfury\",\n  \"password\": \"admin123\"\n}" },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login as Manager India (Captain Marvel)",
+          "event": [{ "listen": "test", "script": { "exec": ["var r = pm.response.json(); if(r.data && r.data.token) pm.collectionVariables.set('token', r.data.token);"] } }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"captainmarvel\",\n  \"password\": \"manager123\"\n}" },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login as Member India (Thanos)",
+          "event": [{ "listen": "test", "script": { "exec": ["var r = pm.response.json(); if(r.data && r.data.token) pm.collectionVariables.set('token', r.data.token);"] } }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"thanos\",\n  \"password\": \"member123\"\n}" },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Restaurants",
+      "item": [
+        {
+          "name": "Get All Restaurants",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/restaurants", "host": ["{{base_url}}"], "path": ["restaurants"] }
+          }
+        },
+        {
+          "name": "Get Restaurant by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/restaurants/1", "host": ["{{base_url}}"], "path": ["restaurants", "1"] }
+          }
+        },
+        {
+          "name": "Get Menu for Restaurant",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/restaurants/1/menu", "host": ["{{base_url}}"], "path": ["restaurants", "1", "menu"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order (Add Items)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"restaurantId\": 1,\n  \"items\": [\n    { \"menuItemId\": 1, \"quantity\": 2 },\n    { \"menuItemId\": 2, \"quantity\": 1 }\n  ]\n}" },
+            "url": { "raw": "{{base_url}}/orders/create", "host": ["{{base_url}}"], "path": ["orders", "create"] }
+          }
+        },
+        {
+          "name": "Place Order (Checkout & Pay) - Admin/Manager only",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"paymentMethodId\": 1\n}" },
+            "url": { "raw": "{{base_url}}/orders/1/place", "host": ["{{base_url}}"], "path": ["orders", "1", "place"] }
+          }
+        },
+        {
+          "name": "Cancel Order - Admin/Manager only",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/orders/1/cancel", "host": ["{{base_url}}"], "path": ["orders", "1", "cancel"] }
+          }
+        },
+        {
+          "name": "Get My Orders",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/orders/my", "host": ["{{base_url}}"], "path": ["orders", "my"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payment Methods",
+      "item": [
+        {
+          "name": "Get Payment Methods",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/payment", "host": ["{{base_url}}"], "path": ["payment"] }
+          }
+        },
+        {
+          "name": "Add Payment Method - Admin only",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"cardHolderName\": \"Nick Fury\",\n  \"cardLastFour\": \"9999\",\n  \"cardType\": \"VISA\",\n  \"expiryMonth\": \"06\",\n  \"expiryYear\": \"2028\",\n  \"isDefault\": false\n}" },
+            "url": { "raw": "{{base_url}}/payment", "host": ["{{base_url}}"], "path": ["payment"] }
+          }
+        },
+        {
+          "name": "Update Payment Method - Admin only",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"cardHolderName\": \"Nick Fury Updated\",\n  \"cardLastFour\": \"9999\",\n  \"cardType\": \"MASTERCARD\",\n  \"expiryMonth\": \"12\",\n  \"expiryYear\": \"2029\",\n  \"isDefault\": true\n}" },
+            "url": { "raw": "{{base_url}}/payment/1", "host": ["{{base_url}}"], "path": ["payment", "1"] }
+          }
+        },
+        {
+          "name": "Delete Payment Method - Admin only",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/payment/1", "host": ["{{base_url}}"], "path": ["payment", "1"] }
+          }
+        }
+      ]
+    }
+  ]
+}
